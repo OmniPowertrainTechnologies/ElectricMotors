@@ -8,4 +8,9 @@ A quick summary of different types electric motors that are being used in the in
 ## Different types of electric motors and their controls - ##
 
 ![Different_types_motors](/Images/Emotors.png)
+
+The electric motor controls are given below - 
 ![Electric_motor_controls](/Images/emotor_controls.png)
+
+Field Oriented Control or (FOC) is widely used and most common type of control for PMSM motors - 
+![FOC](/Images/ClarkePark_Animation.gif)
