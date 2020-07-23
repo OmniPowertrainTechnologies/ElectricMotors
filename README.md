@@ -13,4 +13,5 @@ The electric motor controls are given below -
 ![Electric_motor_controls](/Images/emotor_controls.png)
 
 Field Oriented Control or (FOC) is widely used and most common type of control for PMSM motors - 
+![FOC_bd](/Images/focbd.png)
 ![FOC](/Images/ClarkePark_Animation.gif)
