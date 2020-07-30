@@ -20,7 +20,10 @@ Field Oriented Control or (FOC) is widely used and most common type of control f
 ## Encoder, Hall Sensors and Resolvers 
 
 ### Encoder types 
-[source](https://www.arrow.com/en/research-and-events/articles/how-to-understand-the-different-types-of-encoders)
+[source1](https://www.arrow.com/en/research-and-events/articles/how-to-understand-the-different-types-of-encoders)
+[source2](http://www.eltra.it/encoderpedia-technical-glossary-en-gb/what-is-an-incremental-encoder/)
+[source3](https://en.wikipedia.org/wiki/Hall_effect_sensor)
+[source4](http://www.eltra.it/encoderpedia-technical-glossary-en-gb/what-is-an-incremental-encoder/)
 - **Tachometer**: These are the most basic type of encoder. Tachometers indicate how far the device has turned but doesn’t track direction. These encoders use on/off signals to indicate that the shaft has turned a certain angle. In the real world, you can best recognize a tachometer in its application in a bike speedometer.
 
 - **Incremental (quadrature)**: Like a tachometer, incremental encoders pulse out signals as a wheel turns a certain angular distance. Unlike a tachometer, it outputs two separate signals in a quadrature arrangement so that it can imply both the distance and direction a shaft turns.
