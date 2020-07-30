@@ -47,6 +47,12 @@ Field Oriented Control or (FOC) is widely used and most common type of control f
 ### Hall Sensors - 
 
 ![FOC](/Images/Hall_sensor_tach.gif)
+
+### Resolver 
+
+
+## High Voltage Interlock (High-voltage safety)
+
 ### Reference and Sources
 [#1](https://www.arrow.com/en/research-and-events/articles/how-to-understand-the-different-types-of-encoders)
 [#2](http://www.eltra.it/encoderpedia-technical-glossary-en-gb/what-is-an-incremental-encoder/)
