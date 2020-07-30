@@ -43,3 +43,6 @@ Field Oriented Control or (FOC) is widely used and most common type of control f
 
 - **Capacitive**: This newer technology senses the repeatable pattern of capacitance in a rotor setup.
 
+### Hall Sensors - 
+
+![FOC](/Images/Hall_sensor_tach.gif)
