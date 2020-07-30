@@ -26,7 +26,7 @@ Field Oriented Control or (FOC) is widely used and most common type of control f
 - **Incremental (quadrature)**: Like a tachometer, incremental encoders pulse out signals as a wheel turns a certain angular distance. Unlike a tachometer, it outputs two separate signals in a quadrature arrangement so that it can imply both the distance and direction a shaft turns.
     * **3-channel incremental encoder** -The incremental encoder usually provides two types of squared waves, out-of-phase of 90° electrical degrees, which are usually called channel A and B. Channel A   gives information only about the rotation speed (number of pulses in a certain unit of time), while channel B provides data regarding the direction of rotation, according to the sequence produced by the two signals. Another signal, called Z or zero channel, is also available; it gives the absolute “zero” position of the encoder shaft and is used as a reference point. 
 
-![FOC_bd](/Images/encoder_inc.png)
+![FOC_bd](/Images/encoder_inc.png) ![quadrature_encoder](/Images/QuadratureAnimation.png)
 
 - **Incremental with Extras**: In addition to telling the direction and distance of rotation, some incremental encoders also feature an indexing feature at one point in the rotation. The indexing feature allows the shaft to come back to a known point. Other encoders have a button input, adding a new user interface.
 
