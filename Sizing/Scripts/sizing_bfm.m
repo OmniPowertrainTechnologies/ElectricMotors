@@ -214,6 +214,8 @@ title('Choosing a gear ratio for simulation')
 xlabel('Gear Ratio')
 ylabel('Count')
 catch
+    disp('You have chosen one gear ratio so hostogram plotting is not possible')
+end
 %% LV Plotting
 figure;
 if settings.Check == 0
@@ -307,7 +309,7 @@ else
     plot(rpm_m27, pknm_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-Nm}');
     plot(rpm_m27, ctnm_m27, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M27_{C-Nm}');
     % Application
-    plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
+    plot(rpmMotor, torqueMotor/2, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
     title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
     %ylim([0 500]);
@@ -318,7 +320,7 @@ else
     zoom('xon')
     
 end
-end
+
 %Display of the Motor Parameters
 % fprintf('d1. Tt, ft-lbs   '); fprintf('%6.0f',torqueTire(10:10:90)); fprintf('\n');
 % fprintf('d2. Pt, hp       '); fprintf('%6.1f',powerTire(10:10:90)); fprintf('\n');
