@@ -168,7 +168,7 @@ else
     velVeh = rpmTire/revPerMeter/60;
 end
 % Checking if gear ratio is provided
-if settings.gear_check == 1
+if settings.gear_check
     gearRatio = gearRatio_cust *ones(size(rpmTire));
 end
 gearRatio_all = gearRatio;
@@ -266,38 +266,50 @@ if settings.Check == 0
 else
     %% HV plotting
     % m19
-    pf_m19 = 0.5;
     volt_com_m19 = settings.hv_volt * ones(size(rpm_m19));
     not_com_m19 = settings.hv_not * ones(size(rpm_m19));
     pknm_m19 = fnm_m19(rpm_m19, volt_com_m19, not_com_m19);
-    ctnm_m19 = pknm_m19 * torquefactor;
+    ctnm_m19 = pknm_m19 .* tf_m19;
+    pkkw_m19 = pknm_m19.* rpm_m19 *2*pi/60/1000; 
+    ctkw_m19 = ctnm_m19.* rpm_m19 *2*pi/60/1000; 
     % m21
     volt_com_m21 = settings.hv_volt * ones(size(rpm_m21));
     not_com_m21 = settings.hv_not * ones(size(rpm_m21));
     pknm_m21 = fnm_m21(rpm_m21, volt_com_m21, not_com_m21);
-    ctnm_m21 = pknm_m21 * torquefactor;
+    ctnm_m21 = pknm_m21 .* tf_m21;
+    pkkw_m21 = pknm_m21.* rpm_m21 *2*pi/60/1000; 
+    ctkw_m21 = ctnm_m21.* rpm_m21 *2*pi/60/1000; 
     % m24
     volt_com_m24 = settings.hv_volt * ones(size(rpm_m24));
     not_com_m24 = settings.hv_not * ones(size(rpm_m24));
     pknm_m24 = fnm_m24(rpm_m24, volt_com_m24, not_com_m24);
-    ctnm_m24 = pknm_m24 * torquefactor;
+    ctnm_m24 = pknm_m24.* tf_m24;
+    pkkw_m24 = pknm_m24.* rpm_m24 *2*pi/60/1000; 
+    ctkw_m24 = ctnm_m24.* rpm_m24 *2*pi/60/1000; 
     % m27
     volt_com_m27 = settings.hv_volt * ones(size(rpm_m27));
     not_com_m27 = settings.hv_not * ones(size(rpm_m27));
     pknm_m27 = fnm_m27(rpm_m27, volt_com_m27, not_com_m27);
-    ctnm_m27 = pknm_m27 * torquefactor;
+    ctnm_m27 = pknm_m27.* tf_m27;
+    pkkw_m27 = pknm_m27.* rpm_m27 *2*pi/60/1000; 
+    ctkw_m27 = ctnm_m27.* rpm_m27 *2*pi/60/1000; 
     % m30
     volt_com_m30 = settings.hv_volt * ones(size(rpm_m30));
     not_com_m30 = settings.hv_not * ones(size(rpm_m30));
     pknm_m30 = fnm_m30(rpm_m30, volt_com_m30, not_com_m30);
-    ctnm_m30 = pknm_m30 * torquefactor;
+    ctnm_m30 = pknm_m30.* tf_m30;
+    pkkw_m30 = pknm_m30.* rpm_m30 *2*pi/60/1000; 
+    ctkw_m30 = ctnm_m30.* rpm_m30 *2*pi/60/1000; 
     % m34
     volt_com_m34 = settings.hv_volt * ones(size(rpm_m34));
     not_com_m34 = settings.hv_not * ones(size(rpm_m34));
     pknm_m34 = fnm_m34(rpm_m34, volt_com_m34, not_com_m34);
-    ctnm_m34 = pknm_m34 * torquefactor;
+    ctnm_m34 = pknm_m34.* tf_m34;
+    pkkw_m34 = pknm_m34.* rpm_m34 *2*pi/60/1000; 
+    ctkw_m34 = ctnm_m34.* rpm_m34 *2*pi/60/1000; 
     % 
     % M19
+    subplot(2,1,1),
     plot(rpm_m19, pknm_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-Nm}'); hold on;
     plot(rpm_m19, ctnm_m19, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{C-Nm}');
     % M21
@@ -310,7 +322,7 @@ else
     plot(rpm_m27, pknm_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-Nm}');
     plot(rpm_m27, ctnm_m27, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M27_{C-Nm}');
     % Application
-    plot(rpmMotor, torqueMotor/2, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
+    plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
     title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
     %ylim([0 500]);
@@ -319,6 +331,30 @@ else
     legend()
     grid('on')
     zoom('xon')
+    % power plot
+    subplot(2,1,2),
+    plot(rpm_m19, pkkw_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-kW}'); hold on;
+    plot(rpm_m19, ctkw_m19, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{C-kW}');
+    % M21
+    plot(rpm_m21, pkkw_m21, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M21_{P-kW}');
+    plot(rpm_m21, ctkw_m21, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','o', 'DisplayName', 'M21_{C-kW}');
+    % M24
+    plot(rpm_m24, pkkw_m24, 'Color',[0.8500, 0.3250, 0.0980], 'LineStyle','-', 'Marker','*', 'DisplayName', 'M24_{P-kW}');
+    plot(rpm_m24, ctkw_m24, 'Color',[0.4940, 0.1840, 0.5560],'LineStyle','-','Marker','*', 'DisplayName', 'M24_{C-kW}');
+    % M27
+    plot(rpm_m27, pkkw_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-kW}');
+    plot(rpm_m27, ctkw_m27, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M27_{C-kW}');
+    % Application
+    plot(rpmMotor, powerMotor_mech, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
+    %
+    title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
+    %ylim([0 500]);
+    ylabel('Power [kW]')
+    xlabel('Motor Speed [rpm]');
+    legend()
+    grid('on')
+    zoom('xon')
+    
     
 end
 

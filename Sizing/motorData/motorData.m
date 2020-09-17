@@ -216,5 +216,12 @@ kw_m34(:,:,2) = kw_m34_4;
 kw_m34(:,:,3) = kw_m34_5;
 kw_m34(:,:,4) = kw_m34_6;
 fkw_m34 = griddedInterpolant(rpmgrd_m34, voltgrd_m34, notgrd_m34, kw_m34);
+%% Torque factor
+tf_m19 = readmatrix('motorData.xlsx','Sheet','M19P','Range','O6:O25', 'OutputType', 'double');
+tf_m21 = readmatrix('motorData.xlsx','Sheet','M21P','Range','O6:O25', 'OutputType', 'double');
+tf_m24 = readmatrix('motorData.xlsx','Sheet','M24P','Range','O6:O25', 'OutputType', 'double');
+tf_m27 = readmatrix('motorData.xlsx','Sheet','M27P','Range','O6:O25', 'OutputType', 'double');
+tf_m30 = readmatrix('motorData.xlsx','Sheet','M30P','Range','O6:O25', 'OutputType', 'double');
+tf_m34 = readmatrix('motorData.xlsx','Sheet','M34P','Range','O6:O25', 'OutputType', 'double');
 %% saving in a mat file
 save('motorData.mat')
