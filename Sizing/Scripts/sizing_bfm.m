@@ -1,6 +1,6 @@
 %% Vehicle static simulation
 clc; close all;
-clear;
+clearvars;
 load('..\motorData\motorData.mat')
 %[file, path] = uigetfile('..\..\Customer_Related\*.xlsx');
 % prompt = {'rpm-torque duty cycle? - yes/no','Simulate gear ratio? - yes/no'};
@@ -11,8 +11,8 @@ load('..\motorData\motorData.mat')
 [settings, button] = settingsdlg(...
     'Description', 'This dialog will set the parameters used for motor sizing',...
     'title'      , 'Motor Sizing Option',...
-    {'Customer Name';'custname'}, 'John Deere', ...
-    {'Application Name';'applname'}, 'ZTR', ...
+    {'Customer Name';'custname'}, 'Customer 1', ...
+    {'Application Name';'applname'}, 'Application Name', ...
     'separator'  , 'For High Voltage Application Only',...
     {'This is a High Voltage Application'; 'Check'}, [false true],...
     {'Max Application Voltage';'hv_volt'}, 380,...
@@ -47,9 +47,10 @@ torquemotor_cust    = str2num(dutycycledata{6}); % Nm
 Crr                 = settings.crr;     % Crr, rolling resistance
 Cd                  = settings.cd;   % dragCoeffcient 0.25-0.45
 gradeMax            = settings.grademax;	% max gradeability requirement in percent
-if settings.rr_check == 1
+if settings.rr_check
     rollradius = settings.rr; % meter
     circTire  = 2*pi*rollradius; % meter
+    wheelDiaTire = 2*rollradius; % meter
 else
     %% B4: COMPUTING TIRE TORQUE CONSTSNT, Cttc:
     tireWidth       = 0.2;     % tire width, meter
@@ -264,36 +265,36 @@ if settings.Check == 0
     zoom('xon')
 else
     %% HV plotting
-    torquefactor = 0.5;
     % m19
+    pf_m19 = 0.5;
     volt_com_m19 = settings.hv_volt * ones(size(rpm_m19));
     not_com_m19 = settings.hv_not * ones(size(rpm_m19));
-    pknm_m19 = f19(rpm_m19, volt_com_m19, not_com_m19);
+    pknm_m19 = fnm_m19(rpm_m19, volt_com_m19, not_com_m19);
     ctnm_m19 = pknm_m19 * torquefactor;
     % m21
     volt_com_m21 = settings.hv_volt * ones(size(rpm_m21));
     not_com_m21 = settings.hv_not * ones(size(rpm_m21));
-    pknm_m21 = f21(rpm_m21, volt_com_m21, not_com_m21);
+    pknm_m21 = fnm_m21(rpm_m21, volt_com_m21, not_com_m21);
     ctnm_m21 = pknm_m21 * torquefactor;
     % m24
     volt_com_m24 = settings.hv_volt * ones(size(rpm_m24));
     not_com_m24 = settings.hv_not * ones(size(rpm_m24));
-    pknm_m24 = f24(rpm_m24, volt_com_m24, not_com_m24);
+    pknm_m24 = fnm_m24(rpm_m24, volt_com_m24, not_com_m24);
     ctnm_m24 = pknm_m24 * torquefactor;
     % m27
     volt_com_m27 = settings.hv_volt * ones(size(rpm_m27));
     not_com_m27 = settings.hv_not * ones(size(rpm_m27));
-    pknm_m27 = f27(rpm_m27, volt_com_m27, not_com_m27);
+    pknm_m27 = fnm_m27(rpm_m27, volt_com_m27, not_com_m27);
     ctnm_m27 = pknm_m27 * torquefactor;
     % m30
     volt_com_m30 = settings.hv_volt * ones(size(rpm_m30));
     not_com_m30 = settings.hv_not * ones(size(rpm_m30));
-    pknm_m30 = f30(rpm_m30, volt_com_m30, not_com_m30);
+    pknm_m30 = fnm_m30(rpm_m30, volt_com_m30, not_com_m30);
     ctnm_m30 = pknm_m30 * torquefactor;
     % m34
     volt_com_m34 = settings.hv_volt * ones(size(rpm_m34));
     not_com_m34 = settings.hv_not * ones(size(rpm_m34));
-    pknm_m34 = f34(rpm_m34, volt_com_m34, not_com_m34);
+    pknm_m34 = fnm_m34(rpm_m34, volt_com_m34, not_com_m34);
     ctnm_m34 = pknm_m34 * torquefactor;
     % 
     % M19
