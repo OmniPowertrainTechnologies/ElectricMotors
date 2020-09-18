@@ -2,52 +2,90 @@
 clc; close all;
 clearvars;
 load('..\motorData\motorData.mat')
-%[file, path] = uigetfile('..\..\Customer_Related\*.xlsx');
-% prompt = {'rpm-torque duty cycle? - yes/no','Simulate gear ratio? - yes/no'};
-% dlgtitle = 'Input';
-% dims = [1 35];
-% definput = {'yes','yes'};
-% answer = inputdlg(prompt,dlgtitle,dims,definput);
+% Skip the user dialogue box
+
 [settings, button] = settingsdlg(...
     'Description', 'This dialog will set the parameters used for motor sizing',...
     'title'      , 'Motor Sizing Option',...
+    {'Read from file'; 'readfile_check'}, [false, false], ...
     {'Customer Name';'custname'}, 'Customer 1', ...
     {'Application Name';'applname'}, 'Application Name', ...
     'separator'  , 'For High Voltage Application Only',...
-    {'This is a High Voltage Application'; 'Check'}, [false true],...
+    {'This is a High Voltage Application'; 'hv_check'}, [false true],...
     {'Max Application Voltage';'hv_volt'}, 380,...
     {'Number of Turns';'hv_not'}, 4,...
     'separator'  , 'Gear Ratio', ...
     {'I know the Gear Ratio'; 'gear_check'}, [false, true], ...
     {'Gear Ratio'; 'gearratio'}, 140, ...
+    'separator'  , 'Motor max-eff Speed',...
+    {'Motor max efficiency speeed';'hefrpm'}, 2500, ...
+    {'M13';'m13effrpm'}, 2500, ...
+    {'M15';'m15effrpm'}, 2750, ...
+    {'M17';'m17effrpm'}, 3250, ...
+    {'M19';'m19effrpm'}, 11000, ...
+    {'M21';'m21effrpm'}, 7250, ...
+    {'M24';'m24effrpm'}, 6000, ...
+    {'M27';'m27effrpm'}, 4250, ...
+    {'M34';'m21effrpm'}, 2000, ...
     'separator'  , 'Rolling Radius', ...
     {'I know the Rolling Radius'; 'rr_check'}, [false, true], ...
-    {'Rolling Radius'; 'rr'}, 0.584, ...
+    {'Rolling Radius'; 'rr'}, 0.25, ...
     'separator'  , 'Other parameters',...
-    {'Number of Motors in the application';'numMotors'}, 2, ...
-    {'Motor max efficiency speeed';'hefrpm'}, 2500, ...
+    {'Number of Motors in the application';'numMotors'}, 2, ...    
     {'Vehicle Gross Weight [kg]';'vehmass'}, 351, ...
     {'Coefficient of Rolling Resistance';'crr'}, 0.2, ...
-    {'Coefficient of Wind Drag';'cd'}, 0.32, ...
-    {'Maximum Grade [%]';'grademax'}, 57 ...
+    {'Coefficient of Wind Drag';'cd'}, 0.32 ...    
     );
-dutycycledata = inputdlg({'Wheel speed [rpm]', 'Vehicle Speed [m/s]', 'Grade [%]', 'Wheel Torque [Nm]', 'Motor Speed [rpm]', 'Motor Torque [Nm]'},...
-    'Duty Cycle (provide any two appropriate combinations)', [1 100]);
-index = find(~cellfun(@isempty,dutycycledata));
-index_prod = prod(index);
+if settings.readfile_check
+    [filename, pathname] = uigetfile('C:\Users\adas\Omni USA\Engineering Team - Electrification\Customer_Related\*.xlsx');
+    customername        = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C2:C2', 'OutputType', 'string'); customername = customername{1};  
+    appname             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C3:C3', 'OutputType', 'string'); appname = appname{1};   
+    massVcw             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C15:C15', 'OutputType', 'double');  % vehicle curbWeight, kg
+    gearRatio_cust      = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C8:C8', 'OutputType', 'double');    
+    Crr                 = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C16:C16', 'OutputType', 'double');     % Crr, rolling resistance
+    Cd                  = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C17:C17', 'OutputType', 'double');   % dragCoeffcient 0.25-0.45
+    motorRPMbestEff     = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C9:C9', 'OutputType', 'double');
+    rrcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C11:C11', 'OutputType', 'double');
+    grcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C7:C7', 'OutputType', 'double');
+    hvcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C4:C4', 'OutputType', 'double');
+    systemvolt          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C5:C5', 'OutputType', 'double');
+    data                = readmatrix([pathname, filename], 'Sheet', 'DutyCycle');
+    rpmTire_cust        = data(:,1);
+    velVeh_cust         = data(:,2); % m/s
+    grade_cust          = data(:,3); % grade(%)
+    torqueTire_cust     = data(:,4); % Nm
+    rpmmotor_cust       = data(:,5); % rpm
+    torquemotor_cust    = data(:,6); % Nm
+    %
+    index = find(all(~isnan(data)), 2);
+    index_prod = prod(index);
+else
+    dutycycledata = inputdlg({'Wheel speed [rpm]', 'Vehicle Speed [m/s]', 'Grade [%]', 'Wheel Torque [Nm]', 'Motor Speed [rpm]', 'Motor Torque [Nm]'},...
+        'Duty Cycle (provide any two appropriate combinations)', [1 100]);
+    customername        = settings.custname;   
+    appname             = settings.appname;  
+    massVcw             = settings.vehmass; % vehicle curbWeight, kg
+    gearRatio_cust      = settings.gearratio;
+    Crr                 = settings.crr;     % Crr, rolling resistance
+    Cd                  = settings.cd;   % dragCoeffcient 0.25-0.45
+    motorRPMbestEff     = settings.hefrpm; % rpm
+    rrcheck             = settings.rr_check;
+    grcheck             = settings.gear_check;
+    hvcheck             = settings.hv_check;
+    systemvolt          = settings.hv_volt;
+    rpmTire_cust        = str2num(dutycycledata{1}); % rpm
+    velVeh_cust         = str2num(dutycycledata{2}); % m/s
+    grade_cust          = str2num(dutycycledata{3}); % grade(%)
+    torqueTire_cust     = str2num(dutycycledata{4}); % Nm
+    rpmmotor_cust       = str2num(dutycycledata{5}); % rpm
+    torquemotor_cust    = str2num(dutycycledata{6}); % Nm
+    %
+    index = find(~cellfun(@isempty,dutycycledata));
+    index_prod = prod(index);
+end
+
 %% INPUT DATA 1: inl_vehicle
-massVcw             = settings.vehmass; % vehicle curbWeight, kg
-gearRatio_cust      = settings.gearratio;
-rpmTire_cust        = str2num(dutycycledata{1}); % rpm
-velVeh_cust         = str2num(dutycycledata{2}); % m/s
-grade_cust          = str2num(dutycycledata{3}); % grade(%)
-torqueTire_cust     = str2num(dutycycledata{4}); % Nm
-rpmmotor_cust       = str2num(dutycycledata{5}); % rpm
-torquemotor_cust    = str2num(dutycycledata{6}); % Nm
-Crr                 = settings.crr;     % Crr, rolling resistance
-Cd                  = settings.cd;   % dragCoeffcient 0.25-0.45
-gradeMax            = settings.grademax;	% max gradeability requirement in percent
-if settings.rr_check
+if rrcheck
     rollradius = settings.rr; % meter
     circTire  = 2*pi*rollradius; % meter
     wheelDiaTire = 2*rollradius; % meter
@@ -74,19 +112,20 @@ massAdded       = 135;       % Wmisc, misc weight Added, Kg
 % motorModelName: ADC-XP1227: 28-120-8-15.5
 numMotors        = settings.numMotors;
 etaDrivetrain    = 0.92;   % driveTrainEfficiency @ 2500 rpm
-motorRPMbestEff  = settings.hefrpm; % rpm
-maxVoltMotor     = 48.0;              % motorMaxVolts;
-massMot          = 9.0;               % motor mass i Kg
-kWmotor          = 6.7;               % motor power in kW
-maxRPMmotor      = 4500.0;             % motor Max Rpm
-Kv               = 200; % half of the peak to peak emf
-motorA           = 21163.0;            % motor constant A
-motorB           = 0.19;               % motorconstant B
-motorC           = -4664;              % motor constant C
-motorD           = 192;                % motor constant D
-motorK           = 0.0282;             % motor constant K
-motorN           = 1.37;               % motor constant N
-effMotor         = 0.94;               % motorEff
+
+maxVoltMotor     = 48.0;                % motorMaxVolts;
+massMot          = 9.0;                 % motor mass i Kg
+kWmotor          = 6.7;                 % motor power in kW
+maxRPMmotor      = 4500.0;              % motor Max Rpm
+Kv               = 110;                 % half of the peak to peak emf
+Kt               = 0.88;                 % half of the peak to peak emf
+motorA           = 21163.0;             % motor constant A
+motorB           = 0.19;                % motorconstant B
+motorC           = -4664;               % motor constant C
+motorD           = 192;                 % motor constant D
+motorK           = 0.0282;              % motor constant K
+motorN           = 1.37;                % motor constant N
+effMotor         = 0.94;                % motorEff
 %* B2. Electric Components - Battery
 % batteryModelName: Trojan T-105
 voltBatt         = 6.0;      % batteryVolts
@@ -168,7 +207,7 @@ else
     velVeh = rpmTire/revPerMeter/60;
 end
 % Checking if gear ratio is provided
-if settings.gear_check
+if grcheck
     gearRatio = gearRatio_cust *ones(size(rpmTire));
 end
 gearRatio_all = gearRatio;
@@ -180,9 +219,14 @@ if index_prod == 30
     torqueMotor = torquemotor_cust;
 end
 powerMotor_mech = torqueMotor .* rpmMotor *2*pi/60/ 1000.0; % kW
-currentMotor = Kv * torqueMotor / 8.3;
+currentMotor = torqueMotor/Kt;
 tempMotor = power(torqueMotor,motorB);
-voltageMotor = Kv * rpmMotor;
+%voltageMotor = Kv * rpmMotor;
+if hvcheck
+    voltageMotor = systemvolt;
+else
+    voltageMotor = 48;
+end
 powerMotor_elec = currentMotor .* voltageMotor / 1000.0; % kW
 % Calculations of Battery-Pack Parameters
 Pbp = powerMotor_elec / (effController * effMotor);
@@ -219,7 +263,7 @@ catch
 end
 %% LV Plotting
 figure;
-if settings.Check == 0
+if ~hvcheck
     % yyaxis left
     subplot(2,1,1),
     % M13
@@ -234,7 +278,8 @@ if settings.Check == 0
     % Application
     plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'M17_{P-Nm}');
     %
-    title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
+    caption1 = sprintf('Gear Ratio = %0.2f', gearRatio);
+    title(customername,'::', appname, '::', 'Torque map :: ', caption1, 'Interpreter', 'none')
     ylim([0 50]);
     ylabel('Torque [Nm]')
     xlabel('Motor Speed [rpm]');
@@ -256,7 +301,7 @@ if settings.Check == 0
     plot(rpmMotor, powerMotor_mech, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
     ylim([0 25]);
-    title([settings.custname,'::', settings.applname, '::', 'Power Map'], 'Interpreter', 'none')
+    title([customername,'::', appname, '::', 'Power Map :: ', caption1], 'Interpreter', 'none')
     %
     ylabel('Power [kW]')
     xlabel('Motor Speed [rpm]');
@@ -308,6 +353,7 @@ else
     pkkw_m34 = pknm_m34.* rpm_m34 *2*pi/60/1000; 
     ctkw_m34 = ctnm_m34.* rpm_m34 *2*pi/60/1000; 
     % 
+    caption1 = sprintf('Gear Ratio = %0.2f', gearRatio);
     % M19
     subplot(2,1,1),
     plot(rpm_m19, pknm_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-Nm}'); hold on;
@@ -324,7 +370,7 @@ else
     % Application
     plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
-    title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
+    title([customername,'::', appname, '::', 'Torque map :: ', caption1], 'Interpreter', 'none')
     %ylim([0 500]);
     ylabel('Torque [Nm]')
     xlabel('Motor Speed [rpm]');
@@ -347,7 +393,7 @@ else
     % Application
     plot(rpmMotor, powerMotor_mech, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
-    title([settings.custname,'::', settings.applname, '::', 'Torque map'], 'Interpreter', 'none')
+    title([customername,'::', appname, '::', 'Power Map ::', caption1], 'Interpreter', 'none')
     %ylim([0 500]);
     ylabel('Power [kW]')
     xlabel('Motor Speed [rpm]');
@@ -359,13 +405,15 @@ else
 end
 
 %Display of the Motor Parameters
-% fprintf('d1. Tt, ft-lbs   '); fprintf('%6.0f',torqueTire(10:10:90)); fprintf('\n');
-% fprintf('d2. Pt, hp       '); fprintf('%6.1f',powerTire(10:10:90)); fprintf('\n');
-% fprintf('e1. Tm, ft-lbs   '); fprintf('%6.0f',torqueMotor(10:10:90)); fprintf('\n');
-% fprintf('e2. Rm, rpm      '); fprintf('%6.0f',rpmMotor(10:10:90)); fprintf('\n');
-% fprintf('e3. Im, amps     '); fprintf('%6.0f',currentMotor(10:10:90)); fprintf('\n');
-% fprintf('e4. Vm, volts    '); fprintf('%6.0f',voltageMotor(10:10:90)); fprintf('\n');
-% fprintf('e5. Pm, volts    '); fprintf('%6.1f',powerMotor(10:10:90)); fprintf('\n');
+fprintf('Total Vehicle Mass [Kg]    '); fprintf('%6.0f',massNet*ones(size(torqueTire))); fprintf('\n');
+fprintf('Tire Torque [Nm]           '); fprintf('%6.0f',torqueTire); fprintf('\n');
+fprintf('Grade [perct]              '); fprintf('%6.1f', grade_cust); fprintf('\n');
+fprintf('Motor Torque [Nm]          '); fprintf('%6.0f',torqueMotor); fprintf('\n');
+fprintf('Motor Speed [RPM]          '); fprintf('%6.0f',rpmMotor); fprintf('\n');
+fprintf('Motor Power, kW            '); fprintf('%6.0f',powerMotor_mech); fprintf('\n');
+fprintf('Motor RMS Current, Arms    '); fprintf('%6.0f',currentMotor); fprintf('\n');
+fprintf('System Voltage, volts      '); fprintf('%6.0f',voltageMotor*ones(size(torqueTire))); fprintf('\n');
+fprintf('Electrical Power, kW       '); fprintf('%6.1f',powerMotor_elec); fprintf('\n');
 % %Display of the B-P parameters
 % fprintf('f1. Pbp, kw      '); fprintf('%6.1f',Pbp(10:10:90)); fprintf('\n');
 % fprintf('f2. Ibp, amps    '); fprintf('%6.0f',Ibp(10:10:90)); fprintf('\n');
