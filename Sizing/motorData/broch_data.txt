@@ -1,0 +1,20 @@
+Medium-High Voltage
+M19PS-S-19 M19PS-0-19 M21P4·S·19 M21P4-0-19 M24P4·S-19 M24P4-0-19 M27P4-S·19 M27P4-0-19 M34PS-S-19
+Battery Voltage [Vdc] 200-800 200-800 200-800 200-800 200-800 200-800 200-800 200-800 200-800
+Peak Current [Arms] 326 326x2 437 437x2 554 554x2 641 64lx2 511
+Continuous Torque [Nm] 46 92 85 170 162 324 215 430 455
+Peak Torque (20s) [Nm] 131 262 206 412 368 736 580 1,160 1.114
+Continuous Power (360V) [kW] 26 52 45 90 56 112 60 120 48
+Continuous Power (600V) [kW] 44 88 73 146 94 188 96 192 81
+Peak Power (360V, 20s) [ kW] 72 144 91 182 119 238 128 256 106
+Peak Po-(600V, 20s) [kW] 116 232 150 300 201 402 218 436 182
+Rated Speed (600V) [rpm] 9,000 6,700 5,400 3.750 1,570
+Max Speed (600V) [rpm] 15,000 12,000 9,000 7,350 4,650
+Peak Efficiency[%] 2:95
+Environmental Protection Class IP67
+Main Outer Diameter [mm] 268 268 288 288 323 323 348 348 433
+Length [mm] 119 238 119 238 129 258 143 286 155
+Weight (dry) [kg] 19.5 39.4 23 46.4 32.5 65.4 43.5 87.4 69.5
+Technology Axial Flux PMSM
+Coolant Water & Glycol
+Connecting Box Flexible
