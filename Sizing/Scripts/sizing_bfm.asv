@@ -405,10 +405,8 @@ else
 end
 tabledata = [massNet*ones(size(torqueTire)), torqueTire, grade_cust, torqueMotor, rpmMotor, powerMotor_mech, currentMotor, ...
              voltageMotor*ones(size(torqueTire)), powerMotor_elec, eff_system];
-tableVariable = {'Total Vehicle Mass, [Kg]', 'Tire Torque, [Nm]', 'Grade, [perct]', 'Motor Torque, [Nm]', 'Motor Speed, [RPM]', ...
-                 'Motor Power, [kW]', 'Motor RMS Current, [Arms]', 'System Voltage, [Volt]', 'Electrical Power, [kW]', 'System Efficiency, [perct]'};
-tt = array2table(tabledata, 'VariableName', tableVariable);
-rows2vars(tt)
+tableVariable = ['Total Vehicle Mass, [Kg]', 'Tire Torque, [Nm]', 'Grade, [perct]', 'Motor Torque, [Nm]', 'Motor Speed, [RPM]', ...
+                 'Motor Power, [kW]', 'Motor RMS Current, [Arms]', ]
 %Display of the Motor Parameters
 fprintf('Total Vehicle Mass, [Kg]    '); fprintf('%6.0f',massNet*ones(size(torqueTire))); fprintf('\n');
 fprintf('Tire Torque, [Nm]           '); fprintf('%6.0f',torqueTire); fprintf('\n');
