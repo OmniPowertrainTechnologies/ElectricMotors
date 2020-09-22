@@ -267,18 +267,20 @@ figure;
 if ~hvcheck
     % yyaxis left
     subplot(2,1,1),
+    hold on;
     % M13
-    plot(rpm_pktq_m13, pknm_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{P-Nm}'); hold on;
+    %plot(rpm_pktq_m13, pknm_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{P-Nm}'); hold on;
     plot(rpm_cttq_m13, ctnm_m13, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{C-Nm}');
     % M15
-    plot(rpm_pktq_m15, pknm_m15, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M15_{P-Nm}');
+    %plot(rpm_pktq_m15, pknm_m15, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M15_{P-Nm}');
     plot(rpm_cttq_m15, ctnm_m15, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','o', 'DisplayName', 'M15_{C-Nm}');
     % M17
-    plot(rpm_pktq_m17, pknm_m17, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M17_{P-Nm}');
+    %plot(rpm_pktq_m17, pknm_m17, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M17_{P-Nm}');
     plot(rpm_cttq_m17, ctnm_m17, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M17_{C-Nm}');
     % Application
     plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'M17_{P-Nm}');
     %
+    hold off;
     caption1 = sprintf('Gear Ratio = %0.2f', gearRatio);
     title(customername,'::', appname, '::', 'Torque map :: ', caption1, 'Interpreter', 'none')
     ylim([0 50]);
@@ -290,17 +292,19 @@ if ~hvcheck
     %
     % yyaxis right
     subplot(2,1,2),
-    plot(rpm_pkkw_m13, pkkw_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','.', 'DisplayName', 'M13_{P-kW}'); hold on
+    hold on;
+    %plot(rpm_pkkw_m13, pkkw_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','.', 'DisplayName', 'M13_{P-kW}'); hold on
     plot(rpm_ctkw_m13, ctkw_m13, 'Color',[0,0.5,0], 'LineStyle','--','Marker','.', 'DisplayName', 'M13_{C-kW}');
     %
-    plot(rpm_pkkw_m15, pkkw_m15, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o', 'DisplayName', 'M15_{P-kW}');
+    %plot(rpm_pkkw_m15, pkkw_m15, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o', 'DisplayName', 'M15_{P-kW}');
     plot(rpm_ctkw_m15, ctkw_m15, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','o', 'DisplayName', 'M15_{C-kW}');
     % M17
-    plot(rpm_pkkw_m17, pkkw_m17, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M17_{P-kW}');
+    %plot(rpm_pkkw_m17, pkkw_m17, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M17_{P-kW}');
     plot(rpm_ctkw_m17, ctkw_m17, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M17_{C-kW}');
     % Application
     plot(rpmMotor, powerMotor_mech, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
+    hold off;
     ylim([0 25]);
     title([customername,'::', appname, '::', 'Power Map :: ', caption1], 'Interpreter', 'none')
     %
@@ -357,20 +361,22 @@ else
     caption1 = sprintf('Gear Ratio = %0.2f', gearRatio);
     % M19
     subplot(2,1,1),
-    plot(rpm_m19, pknm_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-Nm}'); hold on;
+    hold on;
+    %plot(rpm_m19, pknm_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-Nm}'); 
     plot(rpm_m19, ctnm_m19, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{C-Nm}');
     % M21
-    plot(rpm_m21, pknm_m21, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M21_{P-Nm}');
+    %plot(rpm_m21, pknm_m21, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M21_{P-Nm}');
     plot(rpm_m21, ctnm_m21, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','o', 'DisplayName', 'M21_{C-Nm}');
     % M24
-    plot(rpm_m24, pknm_m24, 'Color',[0.8500, 0.3250, 0.0980], 'LineStyle','-', 'Marker','*', 'DisplayName', 'M24_{P-Nm}');
+    %plot(rpm_m24, pknm_m24, 'Color',[0.8500, 0.3250, 0.0980], 'LineStyle','-', 'Marker','*', 'DisplayName', 'M24_{P-Nm}');
     plot(rpm_m24, ctnm_m24, 'Color',[0.4940, 0.1840, 0.5560],'LineStyle','-','Marker','*', 'DisplayName', 'M24_{C-Nm}');
     % M27
-    plot(rpm_m27, pknm_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-Nm}');
+    %plot(rpm_m27, pknm_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-Nm}');
     plot(rpm_m27, ctnm_m27, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M27_{C-Nm}');
     % Application
     plot(rpmMotor, torqueMotor, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
+    hold off;
     title([customername,'::', appname, '::', 'Torque map :: ', caption1], 'Interpreter', 'none')
     %ylim([0 500]);
     ylabel('Torque [Nm]')
@@ -380,20 +386,22 @@ else
     zoom('xon')
     % power plot
     subplot(2,1,2),
-    plot(rpm_m19, pkkw_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-kW}'); hold on;
+    hold on;
+    %plot(rpm_m19, pkkw_m19, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{P-kW}'); 
     plot(rpm_m19, ctkw_m19, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M19_{C-kW}');
     % M21
-    plot(rpm_m21, pkkw_m21, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M21_{P-kW}');
+    %plot(rpm_m21, pkkw_m21, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M21_{P-kW}');
     plot(rpm_m21, ctkw_m21, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','o', 'DisplayName', 'M21_{C-kW}');
     % M24
-    plot(rpm_m24, pkkw_m24, 'Color',[0.8500, 0.3250, 0.0980], 'LineStyle','-', 'Marker','*', 'DisplayName', 'M24_{P-kW}');
+    %plot(rpm_m24, pkkw_m24, 'Color',[0.8500, 0.3250, 0.0980], 'LineStyle','-', 'Marker','*', 'DisplayName', 'M24_{P-kW}');
     plot(rpm_m24, ctkw_m24, 'Color',[0.4940, 0.1840, 0.5560],'LineStyle','-','Marker','*', 'DisplayName', 'M24_{C-kW}');
     % M27
-    plot(rpm_m27, pkkw_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-kW}');
+    %plot(rpm_m27, pkkw_m27, 'Color',[0.75, 0, 0.75], 'LineStyle','-', 'Marker','>', 'DisplayName', 'M27_{P-kW}');
     plot(rpm_m27, ctkw_m27, 'Color',[0.3,0.3,0.3],'LineStyle','-','Marker','>', 'DisplayName', 'M27_{C-kW}');
     % Application
     plot(rpmMotor, powerMotor_mech, 'Color',[1, 0, 0], 'LineStyle','none', 'Marker','*', 'DisplayName', 'Application');
     %
+    hold off;
     title([customername,'::', appname, '::', 'Power Map ::', caption1], 'Interpreter', 'none')
     %ylim([0 500]);
     ylabel('Power [kW]')
