@@ -49,6 +49,7 @@ if settings.readfile_check
     grcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C7:C7', 'OutputType', 'double');
     hvcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C4:C4', 'OutputType', 'double');
     systemvolt          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C5:C5', 'OutputType', 'double');
+    numMotors           = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C14:C14', 'OutputType', 'double');
     data                = readmatrix([pathname, filename], 'Sheet', 'DutyCycle');
     rpmTire_cust        = data(:,1);
     velVeh_cust         = data(:,2); % m/s
@@ -56,6 +57,7 @@ if settings.readfile_check
     torqueTire_cust     = data(:,4); % Nm
     rpmmotor_cust       = data(:,5); % rpm
     torquemotor_cust    = data(:,6); % Nm
+    
     %
     index = find(all(~isnan(data)), 2);
     index_prod = prod(index);
@@ -79,6 +81,7 @@ else
     torqueTire_cust     = str2num(dutycycledata{4}); % Nm
     rpmmotor_cust       = str2num(dutycycledata{5}); % rpm
     torquemotor_cust    = str2num(dutycycledata{6}); % Nm
+    numMotors           = settings.numMotors;
     %
     index = find(~cellfun(@isempty,dutycycledata));
     index_prod = prod(index);
@@ -110,7 +113,6 @@ massAdded       = 135;       % Wmisc, misc weight Added, Kg
 %% INPUT DATA 2: in2_electricElements
 %%% Bl. Electric Components - Motor:
 % motorModelName: ADC-XP1227: 28-120-8-15.5
-numMotors        = settings.numMotors;
 etaDrivetrain    = 0.92;   % driveTrainEfficiency @ 2500 rpm
 
 maxVoltMotor     = 48.0;                % motorMaxVolts;
@@ -216,7 +218,7 @@ rpmMotor = rpmTire * gearRatio;
 torqueMotor = torqueTire /gearRatio /etaDrivetrain /numMotors; % Nm
 if index_prod == 30
     rpm_motor = rpmmotor_cust;
-    torqueMotor = torquemotor_cust;
+    torqueMotor = torquemotor_cust/numMotors;
 end
 powerMotor_mech = torqueMotor .* rpmMotor *2*pi/60/ 1000.0; % kW
 currentMotor = torqueMotor/Kt;
@@ -315,6 +317,7 @@ if ~hvcheck
     zoom('xon')
 else
     %% HV plotting
+    
     % m19
     volt_com_m19 = settings.hv_volt * ones(size(rpm_m19));
     not_com_m19 = settings.hv_not * ones(size(rpm_m19));
