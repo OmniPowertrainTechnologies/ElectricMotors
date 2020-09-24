@@ -50,6 +50,7 @@ if settings.readfile_check
     hvcheck             = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C4:C4', 'OutputType', 'double');
     systemvolt          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C5:C5', 'OutputType', 'double');
     numMotors           = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C14:C14', 'OutputType', 'double');
+    rollradius          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C12:C12', 'OutputType', 'double');
     data                = readmatrix([pathname, filename], 'Sheet', 'DutyCycle');
     rpmTire_cust        = data(:,1);
     velVeh_cust         = data(:,2); % m/s
@@ -75,6 +76,7 @@ else
     grcheck             = settings.gear_check;
     hvcheck             = settings.hv_check;
     systemvolt          = settings.hv_volt;
+    rollradius          = settings.rr; % meter
     rpmTire_cust        = str2num(dutycycledata{1}); % rpm
     velVeh_cust         = str2num(dutycycledata{2}); % m/s
     grade_cust          = str2num(dutycycledata{3}); % grade(%)
@@ -88,8 +90,7 @@ else
 end
 
 %% INPUT DATA 1: inl_vehicle
-if rrcheck
-    rollradius = settings.rr; % meter
+if rrcheck    
     circTire  = 2*pi*rollradius; % meter
     wheelDiaTire = 2*rollradius; % meter
 else
