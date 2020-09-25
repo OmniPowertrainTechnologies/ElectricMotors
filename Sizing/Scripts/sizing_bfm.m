@@ -184,14 +184,14 @@ elseif index_prod == 6 % vehicle speed - grade
     gradeCont = grade_cust; % grade(%)
     % Static Drag forces calculations
     phi = 45*(gradeCont/100)*pi/180;
-    forceRR = (Crr + Cbas) * massNet * cos(phi); % Rolling resistance
+    forceRoadLoad = (Crr + Cbas) * massNet * cos(phi); % Rolling resistance
     forceGrade  =  massNet * sin(phi); % Drag force due to grade
     % Dynamic Drag forces calculations
     forceAero    = Cd * A * velVeh .* velVeh;
     xcoeff     = velWind./velVeh;
     Crwf  = (0.98 * xcoeff.^2 + 0.6 * xcoeff) * Crw - 0.4 * xcoeff;
     forceSkinFriction    = (Crwf .* forceAero);
-    forceTot  = forceRR + forceGrade + forceAero + forceSkinFriction; % N
+    forceTot  = forceRoadLoad + forceGrade + forceAero + forceSkinFriction; % N
     torqueTire = 0.5 * wheelDiaTire * forceTot; % Nm
     powerTire  = torqueTire .* velVeh * revPerMeter *2*pi; % watt
     %% Compute gear results
