@@ -27,6 +27,8 @@ load('..\motorData\motorData.mat')
     {'M24';'m24effrpm'}, 6000, ...
     {'M27';'m27effrpm'}, 4250, ...
     {'M34';'m21effrpm'}, 2000, ...
+    'separator'  , 'Acceleration', ...
+    {'Acceleration [m/s^2]'; 'acc'}, 0, ...
     'separator'  , 'Rolling Radius', ...
     {'I know the Rolling Radius'; 'rr_check'}, [false, true], ...
     {'Rolling Radius'; 'rr'}, 0.25, ...
@@ -51,6 +53,7 @@ if settings.readfile_check
     systemvolt          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C5:C5', 'OutputType', 'double');
     numMotors           = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C14:C14', 'OutputType', 'double');
     rollradius          = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C12:C12', 'OutputType', 'double');
+    requiredAcc         = readmatrix([pathname, filename], 'Sheet', 'parameter', 'Range', 'C18:C18', 'OutputType', 'double'); % m/s^2
     data                = readmatrix([pathname, filename], 'Sheet', 'DutyCycle');
     rpmTire_cust        = data(:,1);
     velVeh_cust         = data(:,2); % m/s
@@ -77,6 +80,7 @@ else
     hvcheck             = settings.hv_check;
     systemvolt          = settings.hv_volt;
     rollradius          = settings.rr; % meter
+    requiredAcc         = settings.acc; % m/s^2
     rpmTire_cust        = str2num(dutycycledata{1}); % rpm
     velVeh_cust         = str2num(dutycycledata{2}); % m/s
     grade_cust          = str2num(dutycycledata{3}); % grade(%)
@@ -191,6 +195,7 @@ elseif index_prod == 6 % vehicle speed - grade
     xcoeff     = velWind./velVeh;
     Crwf  = (0.98 * xcoeff.^2 + 0.6 * xcoeff) * Crw - 0.4 * xcoeff;
     forceSkinFriction    = (Crwf .* forceAero);
+    forceAcceleration = ones(size(velVeh)) * massNet*requiredAcc;
     forceTot  = forceRoadLoad + forceGrade + forceAero + forceSkinFriction; % N
     torqueTire = 0.5 * wheelDiaTire * forceTot; % Nm
     powerTire  = torqueTire .* velVeh * revPerMeter *2*pi; % watt
