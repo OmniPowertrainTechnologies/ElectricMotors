@@ -208,11 +208,14 @@ elseif index_prod == 8 % vehicle speed - torque
     rpmTire = velVeh * revPerMeter * 60;
     torqueTire = torqueTire_cust;
     gearRatio = motorRPMbestEff./rpmTire;
-else
+elseif index_prod == 30
     gearRatio = gearRatio_cust;
     rpmTire = rpmmotor_cust/gearRatio;
     torqueTire = torquemotor_cust * gearRatio;
     velVeh = rpmTire/revPerMeter/60;
+else
+    disp('Please check the duty cyelc information')
+    return
 end
 % Checking if gear ratio is provided
 if grcheck
@@ -276,8 +279,11 @@ if ~hvcheck
     % yyaxis left
     subplot(2,1,1),
     hold on;
+    % M11
+    %plot(rpm_pktq_m11, pknm_m11, 'Color',[0.25, 0.25, 0.25], 'LineStyle','--','Marker','^', 'DisplayName', 'M11_{P-Nm}')
+    plot(rpm_cttq_m11, ctnm_m11, 'Color',[0, 0, 1], 'LineStyle','--','Marker','s', 'DisplayName', 'M11_{C-Nm}');
     % M13
-    %plot(rpm_pktq_m13, pknm_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{P-Nm}'); hold on;
+    %plot(rpm_pktq_m13, pknm_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{P-Nm}');
     plot(rpm_cttq_m13, ctnm_m13, 'Color',[0,0.5,0], 'LineStyle','--','Marker','^', 'DisplayName', 'M13_{C-Nm}');
     % M15
     %plot(rpm_pktq_m15, pknm_m15, 'Color',[0.8,0.4,0], 'LineStyle','-', 'Marker','o','DisplayName', 'M15_{P-Nm}');
@@ -290,7 +296,7 @@ if ~hvcheck
     %
     hold off;
     caption1 = sprintf('Gear Ratio = %0.2f', gearRatio);
-    title(customername,'::', appname, '::', 'Torque map :: ', caption1, 'Interpreter', 'none')
+    title([customername,'::', appname, '::', 'Torque map :: ', caption1], 'Interpreter', 'none')
     ylim([0 50]);
     ylabel('Torque [Nm]')
     xlabel('Motor Speed [rpm]');
@@ -301,6 +307,10 @@ if ~hvcheck
     % yyaxis right
     subplot(2,1,2),
     hold on;
+    % M11
+    %plot(rpm_pkkw_m11, pkkw_m11, 'Color',[0.25, 0.25, 0.25], 'LineStyle','--','Marker','.', 'DisplayName', 'M11_{P-kW}'); hold on
+    plot(rpm_ctkw_m11, ctkw_m11, 'Color',[0, 0, 1], 'LineStyle','--','Marker','.', 'DisplayName', 'M11_{C-kW}')
+    %
     %plot(rpm_pkkw_m13, pkkw_m13, 'Color',[0,0,1], 'LineStyle','--','Marker','.', 'DisplayName', 'M13_{P-kW}'); hold on
     plot(rpm_ctkw_m13, ctkw_m13, 'Color',[0,0.5,0], 'LineStyle','--','Marker','.', 'DisplayName', 'M13_{C-kW}');
     %

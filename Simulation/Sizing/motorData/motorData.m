@@ -1,5 +1,19 @@
 clc;
 close all; clearvars;
+%% M11 Motor
+volt_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','I2:I43', 'OutputType', 'double');
+%
+rpm_pktq_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','A2:A45', 'OutputType', 'double');
+pknm_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','B2:B45', 'OutputType', 'double');
+%
+rpm_cttq_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','C2:C43', 'OutputType', 'double');
+ctnm_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','D2:D43', 'OutputType', 'double');
+%
+rpm_pkkw_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','E2:E45', 'OutputType', 'double');
+pkkw_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','F2:F45', 'OutputType', 'double');
+%
+rpm_ctkw_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','G2:G43', 'OutputType', 'double');
+ctkw_m11 = readmatrix('motorData.xlsx','Sheet','M11','Range','H2:H43', 'OutputType', 'double');
 %% M13 Motor
 volt_m13 = readmatrix('motorData.xlsx','Sheet','M13','Range','I2:I109', 'OutputType', 'double');
 %
